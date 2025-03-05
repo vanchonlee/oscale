@@ -1,11 +1,32 @@
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  labels:
-    app.kubernetes.io/name: oscale
-    app.kubernetes.io/managed-by: kustomize
   name: manager-role
 rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - opensearch.vanchonlee.dev
+  resources:
+  - clusterautoscalers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - opensearch.vanchonlee.dev
+  resources:
+  - clusterautoscalers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - opensearch.vanchonlee.dev
+  resources:
+  - clusterautoscalers/status
+  verbs:
+  - get
+  - patch
+  - update

@@ -1,0 +1,188 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.17.2
+  name: clusterautoscalers.opensearch.vanchonlee.dev
+spec:
+  group: opensearch.vanchonlee.dev
+  names:
+    kind: ClusterAutoscaler
+    listKind: ClusterAutoscalerList
+    plural: clusterautoscalers
+    singular: clusterautoscaler
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ClusterAutoscaler is the Schema for the clusterautoscalers API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ClusterAutoscalerSpec defines the desired state of ClusterAutoscaler.
+            properties:
+              datajetCluster:
+                description: possible values is "use1", "apse1", "apse2", "euw1",
+                  "staging"
+                type: string
+              domainName:
+                description: DomainName specify the OpenSearch domain name from AWS
+                  panel, like "feeds"
+                type: string
+              downscaleStabilizationWindow:
+                description: DownscaleStabilizationWindow specify the duration for
+                  which the cluster should be stable before scaling down
+                properties:
+                  duration:
+                    type: string
+                type: object
+              evenOnly:
+                description: EvenOnly specify if the number of nodes should be only
+                  even
+                type: boolean
+              interval:
+                description: Interval for calculating CPU utilization
+                properties:
+                  duration:
+                    type: string
+                type: object
+              maxDataNodes:
+                description: MaxDataNodes specify the maximum number of data nodes
+                  in the OpenSearch cluster
+                format: int32
+                type: integer
+              minDataNodes:
+                description: MinDataNodes specify the minimum number of data nodes
+                  in the OpenSearch cluster
+                format: int32
+                type: integer
+              minDataNodesSchedule:
+                description: MinDataNodesSchedule is a schedule for the minimum number
+                  of data nodes
+                properties:
+                  entities:
+                    items:
+                      description: Entity defines a schedule entity
+                      properties:
+                        count:
+                          format: int32
+                          type: integer
+                        cronEnd:
+                          type: string
+                        cronStart:
+                          type: string
+                      required:
+                      - count
+                      - cronEnd
+                      - cronStart
+                      type: object
+                    type: array
+                type: object
+              nameSpace:
+                description: NameSpace specify the namespace of the OpenSearch cluster,
+                  if provider is k8s
+                type: string
+              provider:
+                description: |-
+                  Foo is an example field of ClusterAutoscaler. Edit clusterautoscaler_types.go to remove/update
+                  DatajetCluster specify the Datajet cluster name, which is used to identify the cluster
+                  provider is one of aws, k8s
+                type: string
+              scaleDownStep:
+                description: |-
+                  ScaleDownStep specify the minimum number of nodes to scale down. For example if step is 4,
+                  if desired number of nodes is decreased by 2, then the number of nodes will be decreased by 0,
+                  if desired number of nodes is decreased by 5, then the number of nodes will be decreased by 4,
+                  if desired number of nodes is decreased by 9, then the number of nodes will be decreased by 8
+                format: int32
+                type: integer
+              scaleUpStep:
+                description: |-
+                  ScaleUpStep specify the minimum number of nodes to scale up. For example if step is 4,
+                  if desired number of nodes is increased by 2, then the number of nodes will be increased by 4,
+                  if desired number of nodes is increased by 5, then the number of nodes will be increased by 8
+                format: int32
+                type: integer
+              scalingEnabled:
+                description: ScalingEnabled specify if the scaling is enabled or not,
+                  if false -- will be dry run
+                type: boolean
+              support:
+                description: Supports allows to calculate the minimum number of nodes
+                  depends on historical usage
+                properties:
+                  entities:
+                    items:
+                      description: Entity defines a support entity
+                      properties:
+                        coefficient:
+                          type: string
+                        interval:
+                          description: Duration represents a duration in string format
+                          properties:
+                            duration:
+                              type: string
+                          type: object
+                        offset:
+                          description: Duration represents a duration in string format
+                          properties:
+                            duration:
+                              type: string
+                          type: object
+                      required:
+                      - coefficient
+                      - interval
+                      - offset
+                      type: object
+                    type: array
+                type: object
+              targetCPUUtilization:
+                description: TargetCPUUtilization specify the target CPU utilization
+                  for the OpenSearch cluster
+                format: int32
+                type: integer
+              upscaleStabilizationWindow:
+                description: UpscaleStabilizationWindow specify the duration for which
+                  the cluster should be stable before scaling up
+                properties:
+                  duration:
+                    type: string
+                type: object
+            required:
+            - domainName
+            - evenOnly
+            - interval
+            - maxDataNodes
+            - minDataNodes
+            - provider
+            - scaleDownStep
+            - scaleUpStep
+            - scalingEnabled
+            - targetCPUUtilization
+            type: object
+          status:
+            description: ClusterAutoscalerStatus defines the observed state of ClusterAutoscaler.
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

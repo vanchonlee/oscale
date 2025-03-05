@@ -17,7 +17,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"github.com/golang/protobuf/ptypes/duration"
+	"github.com/vanchonlee/oscale/internal/pkg/duration"
 	"github.com/vanchonlee/oscale/internal/pkg/schedule"
 	"github.com/vanchonlee/oscale/internal/pkg/support"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -35,8 +35,6 @@ type ClusterAutoscalerSpec struct {
 	// DatajetCluster specify the Datajet cluster name, which is used to identify the cluster
 	// provider is one of aws, k8s
 	Provider string `json:"provider"`
-	// possible values is "use1", "apse1", "apse2", "euw1", "staging"
-	DatajetCluster string `json:"datajetCluster,omitempty"`
 	// DomainName specify the OpenSearch domain name from AWS panel, like "feeds"
 	DomainName string `json:"domainName"`
 	// NameSpace specify the namespace of the OpenSearch cluster, if provider is k8s
