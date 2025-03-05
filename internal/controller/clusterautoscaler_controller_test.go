@@ -28,6 +28,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	opensearchv1alpha1 "github.com/vanchonlee/oscale/api/v1alpha1"
+	"github.com/vanchonlee/oscale/internal/pkg/duration"
+	"github.com/vanchonlee/oscale/internal/pkg/schedule"
 )
 
 var _ = Describe("ClusterAutoscaler Controller", func() {
@@ -46,12 +48,39 @@ var _ = Describe("ClusterAutoscaler Controller", func() {
 			By("creating the custom resource for the Kind ClusterAutoscaler")
 			err := k8sClient.Get(ctx, typeNamespacedName, clusterautoscaler)
 			if err != nil && errors.IsNotFound(err) {
+				truePtr := true
 				resource := &opensearchv1alpha1.ClusterAutoscaler{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
 					},
-					// TODO(user): Specify other spec details if needed.
+					Spec: opensearchv1alpha1.ClusterAutoscalerSpec{
+						Provider:             "aws",
+						DomainName:           "test",
+						TargetCPUUtilization: 80,
+						ScaleUpStep:          1,
+						ScaleDownStep:        1,
+						ScalingEnabled:       &truePtr,
+						Interval:             duration.Duration{DurationStr: "1m"},
+						UpscaleStabilizationWindow: duration.Duration{
+							DurationStr: "10m",
+						},
+						DownscaleStabilizationWindow: duration.Duration{
+							DurationStr: "10m",
+						},
+						EvenOnly:     &truePtr,
+						MinDataNodes: 1,
+						MaxDataNodes: 10,
+						MinDataNodesSchedule: schedule.Schedule{
+							Entities: []schedule.Entity{
+								{
+									CronStart: "0 0 * * *",
+									CronEnd:   "0 0 * * *",
+									Count:     1,
+								},
+							},
+						},
+					},
 				}
 				Expect(k8sClient.Create(ctx, resource)).To(Succeed())
 			}

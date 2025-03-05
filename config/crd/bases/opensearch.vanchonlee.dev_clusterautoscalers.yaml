@@ -39,10 +39,6 @@ spec:
           spec:
             description: ClusterAutoscalerSpec defines the desired state of ClusterAutoscaler.
             properties:
-              datajetCluster:
-                description: possible values is "use1", "apse1", "apse2", "euw1",
-                  "staging"
-                type: string
               domainName:
                 description: DomainName specify the OpenSearch domain name from AWS
                   panel, like "feeds"
