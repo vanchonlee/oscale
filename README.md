@@ -1,8 +1,20 @@
 # oscale
-// TODO(user): Add simple overview of use/purpose
+
+Oscale is a Kubernetes operator that provides automated scaling capabilities for OpenSearch clusters, supporting both AWS OpenSearch Service and self-managed OpenSearch clusters running on Kubernetes via opensearch-operator.
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+
+Oscale monitors OpenSearch cluster metrics and automatically adjusts the number of data nodes based on configurable thresholds and policies. It helps maintain optimal performance while controlling costs by scaling resources up during high demand and down during periods of lower utilization.
+
+Key features:
+- Support for both AWS OpenSearch Service and Kubernetes-based OpenSearch deployments
+- CPU utilization-based scaling with configurable targets
+- Customizable scaling steps and stabilization windows
+- Schedule-based minimum node configuration
+- Historical usage-based scaling support
+- Even-only node count option for balanced cluster configurations
+
+Oscale simplifies OpenSearch cluster management by eliminating the need for manual scaling operations while ensuring your clusters have the resources they need when they need them.
 
 ## Getting Started
 
@@ -21,7 +33,7 @@ make docker-build docker-push IMG=<some-registry>/oscale:tag
 
 **NOTE:** This image ought to be published in the personal registry you specified.
 And it is required to have access to pull the image from the working environment.
-Make sure you have the proper permission to the registry if the above commands don’t work.
+Make sure you have the proper permission to the registry if the above commands don't work.
 
 **Install the CRDs into the cluster:**
 
