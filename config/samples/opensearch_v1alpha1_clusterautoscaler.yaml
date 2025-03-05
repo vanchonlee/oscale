@@ -1,0 +1,9 @@
+apiVersion: opensearch.vanchonlee.dev/v1alpha1
+kind: ClusterAutoscaler
+metadata:
+  labels:
+    app.kubernetes.io/name: oscale
+    app.kubernetes.io/managed-by: kustomize
+  name: clusterautoscaler-sample
+spec:
+  # TODO(user): Add fields here
